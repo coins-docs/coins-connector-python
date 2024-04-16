@@ -7,6 +7,8 @@ import time
 
 timestamp = int(time.time() * 1000)
 
+pprint(user.account(recv_window='', timestamp=timestamp))
+
 pprint(user.config_getall(recv_window='', timestamp=timestamp))
 
 pprint(user.deposit_address(coin='ETH', network='ETH', recv_window='', timestamp=timestamp))

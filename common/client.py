@@ -1,9 +1,6 @@
-#!/usr/bin/env python3
-# coding: utf-8
-
 from common.base import Request,OldRequest,MerchantRequest,FiatRequest
 from config.conf import cf as conf
-
+from config.conf import cf2 as conf2
 
 
 class BrokerClient(Request):
@@ -37,6 +34,46 @@ class BrokerClient(Request):
         if stp_flag:
             params['stpFlag'] = stp_flag
         return self._post('openapi/v1/order', signed=True, data=params)
+
+
+    def order_cancel_replace(self,symbol='',side='',type='',time_in_force='',quantity='',quote_order_qty='',price='',new_client_order_id='',stop_price='',new_order_resp_type='', recv_window='', timestamp='',stp_flag='',
+                             cancelOrderId='', cancelReplaceMode='', cancelRestrictions='', cancelOrigClientOrderId=''):
+        params = {}
+        if symbol:
+            params['symbol'] = symbol
+        if side:
+            params['side'] = side
+        if type:
+            params['type'] = type
+        if time_in_force:
+            params['timeInForce'] = time_in_force
+        if quantity:
+            params['quantity'] = quantity
+        if quote_order_qty:
+            params['quoteOrderQty'] = quote_order_qty
+        if price:
+            params['price'] = price
+        if new_client_order_id:
+            params['newClientOrderId'] = new_client_order_id
+        if stop_price:
+            params['stopPrice'] = stop_price
+        if new_order_resp_type:
+            params['newOrderRespType'] = new_order_resp_type
+        if recv_window:
+            params['recvWindow'] = recv_window
+        if timestamp:
+            params['timestamp'] = timestamp
+        if stp_flag:
+            params['stpFlag'] = stp_flag
+        if cancelOrderId:
+            params['cancelOrderId'] = cancelOrderId
+        if cancelReplaceMode:
+            params['cancelReplaceMode'] = cancelReplaceMode
+        if cancelRestrictions:
+            params['cancelRestrictions'] = cancelRestrictions
+        if cancelOrigClientOrderId:
+            params['cancelOrigClientOrderId'] = cancelOrigClientOrderId
+        return self._post('openapi/v1/order/cancelReplace', signed=True, data=params)
 
 
     def order_test(self,symbol='',side='',type='',time_in_force='',quantity='',quote_order_qty='',price='',new_client_order_id='',stop_price='',new_order_resp_type='', recv_window='', timestamp='', stp_flag=''):
@@ -105,6 +142,7 @@ class BrokerClient(Request):
         if timestamp:
             params['timestamp'] = timestamp
         return self._delete('openapi/v1/openOrders', signed=True, params=params)
+
 
 
     def order_openorders(self,symbol='', recv_window='', timestamp=''):
@@ -340,6 +378,11 @@ class BrokerClient(Request):
         return self._get('openapi/v1/pairs', signed=False, params=params)
 
 
+    def user_ip(self):
+        params = {}
+        return self._get('openapi/v1/user/ip', signed=False, params=params)
+
+
     def p2p_transfer(self, account='', amount='', target_address='', client_transfer_id = '',message='', recv_window='', timestamp=''):
         params = {}
         if account:
@@ -477,7 +520,178 @@ class BrokerClient(Request):
         return self._get('openapi/wallet/v1/deposit/address', signed=True, params=params)
 
 
-    def payment_request(self,payer_contact_info='', receiving_account='', amount='', message='', supported_payment_collectors='', expires_at='', recv_window='', timestamp=''):
+    def subAccount_list(self, email='', page='', limit='', recv_window='', timestamp=''):
+        'For Master Account'
+        params= {}
+        if email:
+            params['email'] = email
+        if page:
+            params['page'] = page
+        if limit:
+            params['limit'] = limit
+        if recv_window:
+            params['recvWindow'] = recv_window
+        if timestamp:
+            params['timestamp'] = timestamp
+        return self._get('openapi/v1/sub-account/list', signed=True, params=params)
+
+
+    def subAccount_create(self, account_name='', recv_window='', timestamp=''):
+        'For Master Account'
+        params= {}
+        if account_name:
+            params['accountName'] = account_name
+        if recv_window:
+            params['recvWindow'] = recv_window
+        if timestamp:
+            params['timestamp'] = timestamp
+        return self._post('openapi/v1/sub-account/create', signed=True, data=params)
+
+
+    def subAccount_asset(self, email='', recv_window='', timestamp=''):
+        'For Master Account'
+        params= {}
+        if email:
+            params['email'] = email
+        if recv_window:
+            params['recvWindow'] = recv_window
+        if timestamp:
+            params['timestamp'] = timestamp
+        return self._get('openapi/v1/sub-account/asset', signed=True, params=params)
+
+
+    def subAccount_transfer_universal_transfer(self, from_email='', to_email='', client_tran_id='', asset='', amount='', recv_window='', timestamp=''):
+        'For Master Account'
+        params = {}
+        if from_email:
+            params['fromEmail'] = from_email
+        if to_email:
+            params['toEmail'] = to_email
+        if client_tran_id:
+            params['clientTranId'] = client_tran_id
+        if asset:
+            params['asset'] = asset
+        if amount:
+            params['amount'] = amount
+        if recv_window:
+            params['recvWindow'] = recv_window
+        if timestamp:
+            params['timestamp'] = timestamp
+        return self._post('openapi/v1/sub-account/transfer/universal-transfer', signed=True, data=params)
+
+
+    def subAccount_transfer_sub_to_master(self, client_tran_id='', asset='', amount='', recv_window='', timestamp=''):
+        'For Sub Account'
+        params = {}
+        if client_tran_id:
+            params['clientTranId'] = client_tran_id
+        if asset:
+            params['asset'] = asset
+        if amount:
+            params['amount'] = amount
+        if recv_window:
+            params['recvWindow'] = recv_window
+        if timestamp:
+            params['timestamp'] = timestamp
+        return self._post('openapi/v1/sub-account/transfer/sub-to-master', signed=True, data=params)
+
+
+    def subAccount_transfer_universal_transfer_history(self, from_email='', to_email='', client_tran_id='', token_id='', start_time='', end_time='', page='', limit='', recv_window='', timestamp=''):
+        'For Master Account'
+        params = {}
+        if from_email:
+            params['fromEmail'] = from_email
+        if to_email:
+            params['toEmail'] = to_email
+        if client_tran_id:
+            params['clientTranId'] = client_tran_id
+        if token_id:
+            params['tokenId'] = token_id
+        if start_time:
+            params['startTime'] = start_time
+        if end_time:
+            params['endTime'] = end_time
+        if page:
+            params['page'] = page
+        if limit:
+            params['limit'] = limit
+        if recv_window:
+            params['recvWindow'] = recv_window
+        if timestamp:
+            params['timestamp'] = timestamp
+        return self._get('openapi/v1/sub-account/transfer/universal-transfer-history', signed=True, params=params)
+
+
+    def subAccount_transfer_sub_history(self, asset='', type='', start_time='', end_time='', page='', limit='', recv_window='', timestamp=''):
+        'For Sub Account'
+        params = {}
+        if asset:
+            params['asset'] = asset
+        if type:
+            params['type'] = type
+        if start_time:
+            params['startTime'] = start_time
+        if end_time:
+            params['endTime'] = end_time
+        if page:
+            params['page'] = page
+        if limit:
+            params['limit'] = limit
+        if recv_window:
+            params['recvWindow'] = recv_window
+        if timestamp:
+            params['timestamp'] = timestamp
+        return self._get('openapi/v1/sub-account/transfer/sub-history', signed=True, params=params)
+
+
+    def subAccount_apikey_ip_restriction(self, apikey='', email='', recv_window='', timestamp=''):
+        'For Master Account'
+        params = {}
+        if apikey:
+            params['apikey'] = apikey
+        if email:
+            params['email'] = email
+        if recv_window:
+            params['recvWindow'] = recv_window
+        if timestamp:
+            params['timestamp'] = timestamp
+        return self._get('openapi/v1/sub-account/apikey/ip-restriction', signed=True, params=params)
+
+
+    def subAccount_apikey_add_ip_restriction(self, apikey='', email='', ip_address='', ip_restriction='', recv_window='', timestamp=''):
+        'For Master Account'
+        params = {}
+        if apikey:
+            params['apikey'] = apikey
+        if email:
+            params['email'] = email
+        if ip_address:
+            params['ipAddress'] = ip_address
+        if ip_restriction:
+            params['ipRestriction'] = ip_restriction
+        if recv_window:
+            params['recvWindow'] = recv_window
+        if timestamp:
+            params['timestamp'] = timestamp
+        return self._post('openapi/v1/sub-account/apikey/add-ip-restriction', signed=True, data=params)
+
+
+    def subAccount_apikey_delete_ip_restriction(self, apikey='', email='', ip_address='', recv_window='', timestamp=''):
+        'For Master Account'
+        params = {}
+        if apikey:
+            params['apikey'] = apikey
+        if email:
+            params['email'] = email
+        if ip_address:
+            params['ipAddress'] = ip_address
+        if recv_window:
+            params['recvWindow'] = recv_window
+        if timestamp:
+            params['timestamp'] = timestamp
+        return self._post('openapi/v1/sub-account/apikey/delete-ip-restriction', signed=True, data=params)
+
+    def payment_request(self,payer_contact_info='', receiving_account='', amount='', message='', supported_payment_collectors='', expires_at=''):
         params = {}
         if payer_contact_info:
             params['payer_contact_info'] = payer_contact_info
@@ -491,15 +705,10 @@ class BrokerClient(Request):
             params['supported_payment_collectors'] = supported_payment_collectors
         if expires_at:
             params['expires_at'] = expires_at
-        if recv_window:
-            params['recvWindow'] = recv_window
-        if timestamp:
-            params['timestamp'] = timestamp
-
         return self._post('openapi/v3/payment-request/payment-requests', signed=True, data=params)
 
 
-    def get_payment_request(self,id='', start_time='', end_time='', limit='', recv_window='', timestamp=''):
+    def get_payment_request(self,id='', start_time='', end_time='', limit=''):
         params = {}
         if id:
             params['id'] = id
@@ -509,35 +718,21 @@ class BrokerClient(Request):
             params['end_time'] = end_time
         if limit:
             params['limit'] = limit
-        if recv_window:
-            params['recvWindow'] = recv_window
-        if timestamp:
-            params['timestamp'] = timestamp
 
         return self._get('openapi/v3/payment-request/get-payment-request', signed=True, params=params)
 
 
-    def cancel_payment_request(self, id='', recv_window='', timestamp=''):
+    def cancel_payment_request(self, id=''):
         params = {}
         if id:
             params['id'] = id
-        if recv_window:
-            params['recvWindow'] = recv_window
-        if timestamp:
-            params['timestamp'] = timestamp
-
         return self._post('openapi/v3/payment-request/delete-payment-request', signed=True, data=params)
 
 
-    def payment_request_reminder(self, id='', recv_window='', timestamp=''):
+    def payment_request_reminder(self, id=''):
         params = {}
         if id:
             params['id'] = id
-        if recv_window:
-            params['recvWindow'] = recv_window
-        if timestamp:
-            params['timestamp'] = timestamp
-
         return self._post('openapi/v3/payment-request/payment-request-reminder', signed=True, data=params)
 
 
@@ -585,6 +780,24 @@ class BrokerClient(Request):
         if end_date:
             params['endDate'] = end_date
         return self._post('openapi/fiat/v1/history', signed=True, data=params)
+
+
+    def generate_qr_code(self, requestId='', type='', source='', amount='', currency='',remark='',expiredSeconds='',qrCodeMerchantName=''):
+        params = {}
+        if requestId: params['requestId'] = requestId
+        if type: params['type'] = type
+        if source: params['source'] = source
+        if amount: params['amount'] = amount
+        if currency: params['currency'] = currency
+        if remark: params['remark'] = remark
+        if expiredSeconds: params['expiredSeconds'] = expiredSeconds
+        if qrCodeMerchantName: params['qrCodeMerchantName'] = qrCodeMerchantName
+        return self._post('openapi/fiat/v1/generate_qr_code', signed=True, data=params)
+
+    def get_qr_code(self, requestId=''):
+        params = {}
+        if requestId: params['requestId'] = requestId
+        return self._get('openapi/fiat/v1/get_qr_code', signed=True, params=params)
 
 
 class OldClient(OldRequest):
@@ -719,4 +932,5 @@ userClient = BrokerClient(entry_point=conf.rest_url, api_key=conf.api_key, secre
 merchantClient = MerchantClient(entry_point=conf.rest_url, api_key=conf.invoice_key, secret=conf.invoice_secret)
 oldClinet = OldClient(entry_point=conf.rest_url, api_key=conf.api_key, secret=conf.secret)
 fiatClient = FiatClient(entry_point=conf.rest_url, api_key=conf.api_key, secret=conf.secret)
+userClient2 = BrokerClient(entry_point=conf2.rest_url, api_key=conf2.api_key, secret=conf2.secret)
 
