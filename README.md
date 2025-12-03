@@ -468,4 +468,4 @@ This project is licensed under the MIT License.
 
 For issues, questions, or contributions, please visit the [GitHub repository](https://github.com/coins-docs/coins-connector-python).
 
-For API documentation, visit [Coins API Documentation](https://coins-docs.github.io/coins-api-postman/).
+For API documentation, visit [Coins API Documentation](https://docs.coins.ph/rest-api).
